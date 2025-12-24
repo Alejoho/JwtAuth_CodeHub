@@ -1,0 +1,165 @@
+@WebApiRefreshTokenDemo_HostAddress = http://localhost:5084
+
+###
+
+POST {{WebApiRefreshTokenDemo_HostAddress}}/api/auth/register
+Accept: application/json
+Content-Type: application/json
+
+{
+    "username": "Alejo-Admin",
+    "email": "alejo@admin.com",
+    "password": "Aho1234."
+}
+
+###
+
+POST {{WebApiRefreshTokenDemo_HostAddress}}/api/auth/register
+Accept: application/json
+Content-Type: application/json
+
+{
+    "username": "Alejo-Manager",
+    "email": "alejo@manager.com",
+    "password": "Aho5678."
+}
+
+###
+
+# @name loginAdmin
+POST {{WebApiRefreshTokenDemo_HostAddress}}/api/auth/login
+Accept: application/json
+Content-Type: application/json
+
+{
+    "email": "alejo@admin.com",
+    "password": "Aho1234."
+}
+
+###
+
+# @name loginManager
+POST {{WebApiRefreshTokenDemo_HostAddress}}/api/auth/login
+Accept: application/json
+Content-Type: application/json
+
+{
+    "email": "alejo@manager.com",
+    "password": "Aho5678."
+}
+
+###
+
+POST {{WebApiRefreshTokenDemo_HostAddress}}/api/auth/refresh-token
+Accept: application/json
+Content-Type: application/json
+
+{
+    "accessToken": "{{loginAdmin.response.body.$.accessToken}}",
+    "refreshToken": "{{loginAdmin.response.body.$.refreshToken}}"
+}
+
+###
+
+POST {{WebApiRefreshTokenDemo_HostAddress}}/api/auth/revoke
+Accept: application/json
+Content-Type: application/json
+
+{
+    "accessToken": "{{loginAdmin.response.body.$.accessToken}}",
+    "refreshToken": "{{loginAdmin.response.body.$.refreshToken}}"
+}
+###
+
+POST {{WebApiRefreshTokenDemo_HostAddress}}/api/auth/refresh-token
+Accept: application/json
+Content-Type: application/json
+
+{
+    "accessToken": "{{loginManager.response.body.$.accessToken}}",
+    "refreshToken": "{{loginManager.response.body.$.refreshToken}}"
+}
+
+###
+
+POST {{WebApiRefreshTokenDemo_HostAddress}}/api/auth/revoke
+Accept: application/json
+Content-Type: application/json
+
+{
+    "accessToken": "{{loginManager.response.body.$.accessToken}}",
+    "refreshToken": "{{loginManager.response.body.$.refreshToken}}"
+}
+
+### -----------------------------------------------------------
+
+POST {{WebApiRefreshTokenDemo_HostAddress}}/api/role/create
+Accept: application/json
+Content-Type: application/json
+
+{
+    "roleName": "admin"
+}
+
+###
+
+POST {{WebApiRefreshTokenDemo_HostAddress}}/api/role/create
+Accept: application/json
+Content-Type: application/json
+
+{
+    "roleName": "manager"
+}
+
+###
+
+POST {{WebApiRefreshTokenDemo_HostAddress}}/api/role/assign
+Accept: application/json
+Content-Type: application/json
+
+{
+    "email": "alejo@admin.com",
+    "roleName": "admin"
+}
+
+###
+
+POST {{WebApiRefreshTokenDemo_HostAddress}}/api/role/assign
+Accept: application/json
+Content-Type: application/json
+
+{
+    "email": "alejo@manager.com",
+    "roleName": "manager"
+}
+
+### -----------------------------------------------------------
+
+GET {{WebApiRefreshTokenDemo_HostAddress}}/api/test
+Accept: application/json
+
+###
+
+GET {{WebApiRefreshTokenDemo_HostAddress}}/api/test/protected
+Accept: application/json
+Authorization: Bearer {{loginAdmin.response.body.$.accessToken}}
+
+###
+
+GET {{WebApiRefreshTokenDemo_HostAddress}}/api/test/protected
+Accept: application/json
+Authorization: Bearer {{loginManager.response.body.$.accessToken}}
+
+###
+
+GET {{WebApiRefreshTokenDemo_HostAddress}}/api/test/admin
+Accept: application/json
+Authorization: Bearer {{loginAdmin.response.body.$.accessToken}}
+
+###
+
+GET {{WebApiRefreshTokenDemo_HostAddress}}/api/test/admin
+Accept: application/json
+Authorization: Bearer {{loginManager.response.body.$.accessToken}}
+
+###

@@ -1,0 +1,6 @@
+<Solution>
+  <Folder Name="/SolutionsItems/">
+    <File Path=".gitignore" />
+  </Folder>
+  <Project Path="WebApiRefreshTokenDemo/WebApiRefreshTokenDemo.csproj" />
+</Solution>
