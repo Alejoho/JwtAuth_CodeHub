@@ -15,7 +15,7 @@ public class TestController : ControllerBase
     [HttpGet("protected")]
     public IActionResult Protected() => Ok("This is a protected enpoint. You are authorize");
 
-    [Authorize(Roles = "admin")]
+    [Authorize(Roles = "Admin")]
     [HttpGet("admin")]
     public IActionResult Admin() => Ok("This is an admin endpoint. You are authorized as an Admin.");
 }

@@ -1,7 +1,6 @@
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
-//using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
@@ -19,14 +18,6 @@ public class TokenService(IOptions<JwtSettingsOptions> jwtOptions) : ITokenServi
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtOptions.SecurityKey));
         var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
-        //var claims = new List<Claim>
-        //{
-        //    new(JwtRegisteredClaimNames.Sub,user.Id),
-        //    new(JwtRegisteredClaimNames.UniqueName,user.UserName??""),
-        //    new(JwtRegisteredClaimNames.Jti,Guid.NewGuid().ToString()),
-        //    new(ClaimTypes.NameIdentifier,user.Id),
-        //};
-
         var claims = new Dictionary<string, object>
         {
             { JwtRegisteredClaimNames.Sub,user.Id },
@@ -40,7 +31,6 @@ public class TokenService(IOptions<JwtSettingsOptions> jwtOptions) : ITokenServi
             claims.Add(ClaimTypes.Role, role);
         }
 
-        //var token = new JwtSecurityToken();
         var token = new SecurityTokenDescriptor()
         {
             Issuer = _jwtOptions.Issuer,
