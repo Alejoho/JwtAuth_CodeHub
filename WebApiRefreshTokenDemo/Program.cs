@@ -23,7 +23,7 @@ builder.Services.AddOptions<JwtSettingsOptions>()
     .ValidateDataAnnotations();
 
 builder.Services.AddDbContext<ApplicationDbContext>(opts =>
-    opts.UseSqlServer(builder.Configuration.GetConnectionString("Default")));
+    opts.UseInMemoryDatabase("AuthDb"));
 
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>(opts =>
 {
