@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Scalar.AspNetCore;
+using WebApiRefreshTokenDemo;
 using WebApiRefreshTokenDemo.Data;
 using WebApiRefreshTokenDemo.Models;
 using WebApiRefreshTokenDemo.Options;
@@ -70,6 +71,8 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
+    await app.ConfigureTestData();
+
     app.MapOpenApi();
 
     app.MapScalarApiReference(string.Empty);

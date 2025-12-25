@@ -1,4 +1,6 @@
 @WebApiRefreshTokenDemo_HostAddress = http://localhost:5084
+@accessToken = {{login.response.body.$.accessToken}} 
+@refreshToken = {{login.response.body.$.refreshToken}} 
 
 ###
 
@@ -26,7 +28,19 @@ Content-Type: application/json
 
 ###
 
-# @name loginAdmin
+# @name login
+POST {{WebApiRefreshTokenDemo_HostAddress}}/api/auth/login
+Accept: application/json
+Content-Type: application/json
+
+{
+    "email": "test@test.test",
+    "password": "Test1234."
+}
+
+###
+
+# @name login
 POST {{WebApiRefreshTokenDemo_HostAddress}}/api/auth/login
 Accept: application/json
 Content-Type: application/json
@@ -38,7 +52,7 @@ Content-Type: application/json
 
 ###
 
-# @name loginManager
+# @name login
 POST {{WebApiRefreshTokenDemo_HostAddress}}/api/auth/login
 Accept: application/json
 Content-Type: application/json
@@ -55,8 +69,8 @@ Accept: application/json
 Content-Type: application/json
 
 {
-    "accessToken": "{{loginAdmin.response.body.$.accessToken}}",
-    "refreshToken": "{{loginAdmin.response.body.$.refreshToken}}"
+    "accessToken": "{{accessToken}}",
+    "refreshToken": "{{refreshToken}}"
 }
 
 ###
@@ -66,9 +80,10 @@ Accept: application/json
 Content-Type: application/json
 
 {
-    "accessToken": "{{loginAdmin.response.body.$.accessToken}}",
-    "refreshToken": "{{loginAdmin.response.body.$.refreshToken}}"
+    "accessToken": "{{accessToken}}",
+    "refreshToken": "{{refreshToken}}"
 }
+
 ###
 
 POST {{WebApiRefreshTokenDemo_HostAddress}}/api/auth/refresh-token
@@ -76,8 +91,8 @@ Accept: application/json
 Content-Type: application/json
 
 {
-    "accessToken": "{{loginManager.response.body.$.accessToken}}",
-    "refreshToken": "{{loginManager.response.body.$.refreshToken}}"
+    "accessToken": "{{accessToken}}",
+    "refreshToken": "{{refreshToken}}"
 }
 
 ###
@@ -87,8 +102,8 @@ Accept: application/json
 Content-Type: application/json
 
 {
-    "accessToken": "{{loginManager.response.body.$.accessToken}}",
-    "refreshToken": "{{loginManager.response.body.$.refreshToken}}"
+    "accessToken": "{{accessToken}}",
+    "refreshToken": "{{refreshToken}}"
 }
 
 ### -----------------------------------------------------------
@@ -135,31 +150,19 @@ Content-Type: application/json
 
 ### -----------------------------------------------------------
 
-GET {{WebApiRefreshTokenDemo_HostAddress}}/api/test
+GET {{WebApiRefreshTokenDemo_HostAddress}}/api/test/public
 Accept: application/json
 
 ###
 
 GET {{WebApiRefreshTokenDemo_HostAddress}}/api/test/protected
 Accept: application/json
-Authorization: Bearer {{loginAdmin.response.body.$.accessToken}}
-
-###
-
-GET {{WebApiRefreshTokenDemo_HostAddress}}/api/test/protected
-Accept: application/json
-Authorization: Bearer {{loginManager.response.body.$.accessToken}}
+Authorization: Bearer {{accessToken}}
 
 ###
 
 GET {{WebApiRefreshTokenDemo_HostAddress}}/api/test/admin
 Accept: application/json
-Authorization: Bearer {{loginAdmin.response.body.$.accessToken}}
-
-###
-
-GET {{WebApiRefreshTokenDemo_HostAddress}}/api/test/admin
-Accept: application/json
-Authorization: Bearer {{loginManager.response.body.$.accessToken}}
+Authorization: Bearer {{accessToken}}
 
 ###
