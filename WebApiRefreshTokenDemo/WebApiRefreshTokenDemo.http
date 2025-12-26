@@ -26,7 +26,7 @@ Content-Type: application/json
     "password": "Aho5678."
 }
 
-###
+###-----------------------------------------------------------
 
 # @name login
 POST {{WebApiRefreshTokenDemo_HostAddress}}/api/auth/login
@@ -66,45 +66,11 @@ Content-Type: application/json
 
 POST {{WebApiRefreshTokenDemo_HostAddress}}/api/auth/refresh-token
 Accept: application/json
-Content-Type: application/json
-
-{
-    "accessToken": "{{accessToken}}",
-    "refreshToken": "{{refreshToken}}"
-}
 
 ###
 
 POST {{WebApiRefreshTokenDemo_HostAddress}}/api/auth/revoke
 Accept: application/json
-Content-Type: application/json
-
-{
-    "accessToken": "{{accessToken}}",
-    "refreshToken": "{{refreshToken}}"
-}
-
-###
-
-POST {{WebApiRefreshTokenDemo_HostAddress}}/api/auth/refresh-token
-Accept: application/json
-Content-Type: application/json
-
-{
-    "accessToken": "{{accessToken}}",
-    "refreshToken": "{{refreshToken}}"
-}
-
-###
-
-POST {{WebApiRefreshTokenDemo_HostAddress}}/api/auth/revoke
-Accept: application/json
-Content-Type: application/json
-
-{
-    "accessToken": "{{accessToken}}",
-    "refreshToken": "{{refreshToken}}"
-}
 
 ### -----------------------------------------------------------
 
@@ -157,12 +123,10 @@ Accept: application/json
 
 GET {{WebApiRefreshTokenDemo_HostAddress}}/api/test/protected
 Accept: application/json
-Authorization: Bearer {{accessToken}}
 
 ###
 
 GET {{WebApiRefreshTokenDemo_HostAddress}}/api/test/admin
 Accept: application/json
-Authorization: Bearer {{accessToken}}
 
 ###

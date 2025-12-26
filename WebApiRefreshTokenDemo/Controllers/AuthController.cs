@@ -57,13 +57,18 @@ public class AuthController(
 
         await _userManager.UpdateAsync(user);
 
-        return Ok(new TokenResponseDto(accessToken, refreshToken.Token));
+        SetTokensInCookies(new TokenResponseDto(accessToken, refreshToken.Token));
+
+        return Ok();
     }
 
     [HttpPost("refresh-token")]
-    public async Task<IActionResult> RefreshToken([FromBody] TokenRequestDto dto)
+    public async Task<IActionResult> RefreshToken()
     {
-        var refreshToken = dto.RefreshToken;
+        if (Request.Cookies.TryGetValue("refreshToken", out string? refreshToken) is false)
+        {
+            return BadRequest(new { Message = "No refresh token passed" });
+        }
 
         var user = await _userManager.Users
             .Include(u => u.RefreshTokens)
@@ -95,13 +100,19 @@ public class AuthController(
         var roles = await _userManager.GetRolesAsync(user);
         var newAccessToken = _tokenService.CreateAccessToken(user, roles);
 
-        return Ok(new TokenResponseDto(newAccessToken, newRefreshToken.Token));
+        SetTokensInCookies(new TokenResponseDto(newAccessToken, newRefreshToken.Token));
+
+        return Ok();
     }
 
     [HttpPost("revoke")]
-    public async Task<IActionResult> Revoke([FromBody] TokenRequestDto dto)
+    public async Task<IActionResult> Revoke()
     {
-        var token = dto.RefreshToken;
+        if (Request.Cookies.TryGetValue("refreshToken", out string? token) is false)
+        {
+            return BadRequest(new { Message = "No refresh token passed" });
+        }
+
         var user = await _userManager.Users
             .Include(u => u.RefreshTokens)
             .SingleOrDefaultAsync(u => u.RefreshTokens.Any(
@@ -124,6 +135,9 @@ public class AuthController(
 
         await _userManager.UpdateAsync(user);
 
+        Response.Cookies.Delete("accessToken");
+        Response.Cookies.Delete("refreshToken");
+
         return Ok(new { Message = "Token revoked successfully" });
     }
 
@@ -135,5 +149,32 @@ public class AuthController(
         }
 
         return HttpContext.Connection.RemoteIpAddress?.ToString() ?? "Unknown";
+    }
+
+    private void SetTokensInCookies(TokenResponseDto dto)
+    {
+        Response.Cookies.Append(
+            "accessToken",
+            dto.AccessToken,
+            new()
+            {
+                MaxAge = TimeSpan.FromMinutes(60),
+                HttpOnly = true,
+                SameSite = SameSiteMode.Strict,
+                IsEssential = true,
+                Secure = true,
+            });
+
+        Response.Cookies.Append(
+            "refreshToken",
+            dto.RefreshToken,
+            new()
+            {
+                MaxAge = TimeSpan.FromDays(7),
+                HttpOnly = true,
+                SameSite = SameSiteMode.Strict,
+                IsEssential = true,
+                Secure = true
+            });
     }
 }
