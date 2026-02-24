@@ -1,9 +1,10 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using WebApiRefreshTokenDemo.Data;
+using Microsoft.Extensions.Options;
 using WebApiRefreshTokenDemo.DTOs;
 using WebApiRefreshTokenDemo.Models;
+using WebApiRefreshTokenDemo.Options;
 using WebApiRefreshTokenDemo.Services;
 
 namespace WebApiRefreshTokenDemo.Controllers;
@@ -12,10 +13,13 @@ namespace WebApiRefreshTokenDemo.Controllers;
 [ApiController]
 public class AuthController(
     UserManager<ApplicationUser> userManager,
-    ITokenService tokenService) : ControllerBase
+    ITokenService tokenService,
+    IOptions<JwtSettingsOptions> jwtSettingsOptions) : ControllerBase
 {
     private readonly UserManager<ApplicationUser> _userManager = userManager;
     private readonly ITokenService _tokenService = tokenService;
+    private readonly JwtSettingsOptions _jwtSettingsOptions = jwtSettingsOptions.Value;
+
 
     [HttpPost("register")]
     public async Task<IActionResult> Register([FromBody] RegisterDto dto)
@@ -158,7 +162,7 @@ public class AuthController(
             dto.AccessToken,
             new()
             {
-                MaxAge = TimeSpan.FromMinutes(60),
+                MaxAge = TimeSpan.FromMinutes(_jwtSettingsOptions.AccessTokenExpirationMinutes),
                 HttpOnly = true,
                 SameSite = SameSiteMode.Strict,
                 IsEssential = true,
@@ -170,7 +174,7 @@ public class AuthController(
             dto.RefreshToken,
             new()
             {
-                MaxAge = TimeSpan.FromDays(7),
+                MaxAge = TimeSpan.FromDays(_jwtSettingsOptions.RefreshTokenExpirationDays),
                 HttpOnly = true,
                 SameSite = SameSiteMode.Strict,
                 IsEssential = true,
