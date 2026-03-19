@@ -1,4 +1,3 @@
-using System;
 using Microsoft.AspNetCore.Identity;
 using WebApiRefreshTokenDemo.Models;
 
@@ -12,7 +11,7 @@ public static class TestConfiguration
     private const string RoleName = "Admin";
     public static async Task ConfigureTestData(this WebApplication app)
     {
-        var scope = app.Services.CreateScope();
+        using var scope = app.Services.CreateScope();
         var services = scope.ServiceProvider;
         await CreateUser(services);
         await CreateRole(RoleName, services);

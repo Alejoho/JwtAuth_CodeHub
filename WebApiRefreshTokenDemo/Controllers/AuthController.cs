@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -109,6 +110,7 @@ public class AuthController(
         return Ok();
     }
 
+    [Authorize]
     [HttpPost("revoke")]
     public async Task<IActionResult> Revoke()
     {
@@ -178,7 +180,8 @@ public class AuthController(
                 HttpOnly = true,
                 SameSite = SameSiteMode.Strict,
                 IsEssential = true,
-                Secure = true
+                Secure = true,
+                Path = "/api/auth/refresh-token"
             });
     }
 }

@@ -46,7 +46,7 @@ public class RoleController(
 
         if (alreadyInRole is true)
         {
-            return Ok($"Role '{dto.RoleName}' already assigned to user '{user.Email}'.");
+            return Ok($"Role '{dto.RoleName}' already assigned to user with email '{user.Email}'.");
         }
 
         if ((await _roleManager.RoleExistsAsync(dto.RoleName)) is false)
@@ -61,6 +61,6 @@ public class RoleController(
             return BadRequest(result.Errors);
         }
 
-        return Ok($"Role '{dto.RoleName}' assigned to user '{user.Email}' successfully.");
+        return Ok($"Role '{dto.RoleName}' assigned to user with email '{user.Email}' successfully.");
     }
 }

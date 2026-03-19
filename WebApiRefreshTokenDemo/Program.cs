@@ -1,9 +1,9 @@
-using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Scalar.AspNetCore;
+using System.Text;
 using WebApiRefreshTokenDemo;
 using WebApiRefreshTokenDemo.Data;
 using WebApiRefreshTokenDemo.Models;
@@ -79,12 +79,17 @@ builder.Services.AddAuthentication(opts =>
 
 builder.Services.AddScoped<ITokenService, TokenService>();
 
+bool createTestData = builder.Configuration.GetValue<bool>("CreateTestData");
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    await app.ConfigureTestData();
+    if (createTestData)
+    {
+        await app.ConfigureTestData();
+    }
 
     app.MapOpenApi();
 
