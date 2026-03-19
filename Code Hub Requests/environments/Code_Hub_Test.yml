@@ -1,0 +1,16 @@
+name: Code_Hub_Test
+variables:
+  - name: baseUrl
+    value: https://localhost:7238
+  - name: managerUser
+    value: Mario
+  - name: managerPassword
+    value: 12Mario.
+  - name: adminUser
+    value: Luigi
+  - name: adminPassword
+    value: 12Luigi.
+  - name: managerEmail
+    value: mario@bros.com
+  - name: adminEmail
+    value: luigi@bros.com

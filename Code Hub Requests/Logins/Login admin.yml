@@ -1,0 +1,22 @@
+info:
+  name: Login admin
+  type: http
+  seq: 2
+
+http:
+  method: POST
+  url: "{{baseUrl}}/api/auth/login"
+  body:
+    type: json
+    data: |-
+      {
+          "email": "{{adminEmail}}",
+          "password": "{{adminPassword}}"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

@@ -1,0 +1,23 @@
+info:
+  name: Register admin
+  type: http
+  seq: 1
+
+http:
+  method: POST
+  url: "{{baseUrl}}/api/auth/register"
+  body:
+    type: json
+    data: |-
+      {
+        "username": "{{adminUser}}",
+        "email": "{{adminEmail}}",
+        "password": "{{adminPassword}}"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

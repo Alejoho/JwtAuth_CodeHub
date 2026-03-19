@@ -1,0 +1,22 @@
+info:
+  name: Assign manager role
+  type: http
+  seq: 3
+
+http:
+  method: POST
+  url: "{{baseUrl}}/api/role/assign"
+  body:
+    type: json
+    data: |-
+      {
+        "email": "{{managerEmail}}",
+        "roleName": "manager"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

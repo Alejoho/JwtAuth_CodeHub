@@ -1,0 +1,22 @@
+info:
+  name: Login manager
+  type: http
+  seq: 1
+
+http:
+  method: POST
+  url: "{{baseUrl}}/api/auth/login"
+  body:
+    type: json
+    data: |-
+      {
+          "email": "{{managerEmail}}",
+          "password": "{{managerPassword}}"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
