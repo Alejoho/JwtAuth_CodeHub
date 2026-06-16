@@ -4,7 +4,7 @@ This is an ASP.NET Web API app that demonstrates an example implementation of a 
 
 ## Configuration
 
-In [`appsettings.Development.json`](WebApiRefreshTokenDemo\appsettings.Development.json) you can configure token expiration times. To quickly test token expiration, temporarily set shorter values (under a minute) in [`TokenService.cs`](WebApiRefreshTokenDemo\Services\TokenService.cs). It's advisable to match those values with the cookie expiration values in [`AuthController.cs`](WebApiRefreshTokenDemo\Controllers\AuthController.cs).
+In [`appsettings.json`](WebApiRefreshTokenDemo\appsettings.Development.json) there are some settings you need to fill. To quickly test token expiration, temporarily set shorter values (under a minute) in the `CreateRefreshToken` method in [`TokenService.cs`](WebApiRefreshTokenDemo\Services\TokenService.cs). It's advisable to match those values with the cookie expiration values in [`AuthController.cs`](WebApiRefreshTokenDemo\Controllers\AuthController.cs).
 
 If the `CreateTestData` setting is `true`, a default user is created with these credentials:
 
@@ -14,6 +14,16 @@ Email = "test@test.test";
 Password = "Test1234.";
 RoleName = "Admin";
 ```
+
+## How to run with Docker
+
+In order to use Docker to run the app you need to set 2 environment variables: `DB_PASSWORD` and `CERTIFICATE_PASSWORD`. You also have to create a certificate to allow the use of a secure connection. To create the certificate run this command in a PowerShell terminal:
+
+```
+dotnet dev-certs https -ep $env:USERPROFILE\.aspnet\https\WebApiRefreshTokenDemo.pfx -p <password>
+```
+
+Keep in mind that this is the path in a Windows machine, and uses env susbtitution of PowerShell, if you use another OS make changes to the path and the volume in the docker-compose.yaml file accordingly. Also the password you use need to match the one in the env var.
 
 ## How to test
 
@@ -44,4 +54,3 @@ There is a Bruno collection in the repository root with requests pre-filled with
 When a user requests the refresh-token endpoint, the `refreshToken` cookie is sent. The app finds that token in the database, revokes it, creates a new refresh token, generates a new access token, and returns both as cookies. Every refresh token links to its successor, so a user's refresh-token chain is auditable. A mechanism to delete old refresh tokens after a period is recommended for production but was not implemented here to keep the example simple.
 
 The `OnMessageReceived` event of the `JwtBearerEvents` class is used to copy the refresh token from the cookie to the `HttpContext.Token` property, where the authentication system can use it.
-
