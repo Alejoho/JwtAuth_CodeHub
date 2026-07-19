@@ -181,7 +181,7 @@ public class AuthController(
                 SameSite = SameSiteMode.Strict,
                 IsEssential = true,
                 Secure = true,
-                Path = "/api/auth/refresh-token"
+                Path = "/api/auth"
             });
     }
 }
